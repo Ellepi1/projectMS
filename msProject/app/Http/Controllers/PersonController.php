@@ -27,22 +27,6 @@ class PersonController extends Controller {
         return redirect()->route('events.show', $event_id);
     }
 
-    public function edit(Person $person) {
-        $events = Event::all();
-        return view('people.edit', compact('person', 'events'));
-    }
-
-    public function update(Request $request, Person $person) {
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'event_id' => 'nullable|exists:events,id',
-        ]);
-
-        $person->update($request->all());
-        return redirect()->route('home');
-    }
-
     public function destroy(Person $person) {
         $event_id = $person->event_id; 
         $person->delete();

@@ -7,9 +7,11 @@ use App\Models\Person;
 use Illuminate\Http\Request;
 
 class EventController extends Controller {
-    public function index() {
-        $events = Event::all();
-        return view('events.index', compact('events'));
+    public function index(Request $request) {
+        $sort = $request->get('sort', 'date'); // Default sort by name
+    $events = Event::orderBy($sort)->get();
+
+    return view('events.index', compact('events'));
     }
 
     public function create() {
@@ -27,7 +29,10 @@ class EventController extends Controller {
     }
 
     public function show(Event $event) {
-        $people = Person::where('event_id', $event->id)->get();
+        $people = Person::where('event_id', $event->id)
+                    ->orderBy('last_name')
+                    ->orderBy('first_name')
+                    ->get();
         return view('events.show', compact('event', 'people'));
     }
 
